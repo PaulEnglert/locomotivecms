@@ -400,7 +400,8 @@ var wysihtml5ParserRules = {
             "check_attributes": {
                 "id": "any",
                 "class": "any",
-                "data-*": "any"
+                "data-*": "any",
+                "style": "any"
             }
         },
         "rp": {

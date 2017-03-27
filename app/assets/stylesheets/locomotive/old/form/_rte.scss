@@ -13,6 +13,32 @@
           &:last-child {
             margin-right: 0px;
           }
+
+        }
+
+        .color-picker {
+          display: inline-block;
+          width: 165px;
+          height: 1.2em;
+
+          input {
+            width: 130px;
+            height: 1em;
+            font-size: 0.8em;
+          }
+          span {
+            width: 30px;
+            padding: 5px;
+            i {
+              width: 20px;
+              height: 1.2em;
+            }
+          }
+        }
+        .remove-color {
+          i {
+            text-decoration: line-through;
+          }
         }
 
         a {

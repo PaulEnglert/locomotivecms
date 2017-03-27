@@ -10,6 +10,18 @@
     a data-wysihtml5-command='strike'
       i.fa.fa-strikethrough
 
+  span.wysihtml5-toolbar-group
+    div.color-picker.input-group.colorpicker-component
+      input.form-control type='text' value='#000000'
+      span.input-group-addon
+        i
+    | &nbsp;&nbsp;
+    a.apply-color
+      i.fa.fa-paint-brush
+    | &nbsp;&nbsp;
+    a.remove-color
+      i.fa.fa-paint-brush
+
   - unless inline
     span.wysihtml5-toolbar-group
       a data-wysihtml5-command='justifyLeft'
@@ -104,4 +116,5 @@
         i.fa.fa-expand
     a data-wysihtml5-action='change_view'
       i.fa.fa-code
+
 

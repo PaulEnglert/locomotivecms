@@ -3,10 +3,13 @@ Locomotive.Views.Inputs ||= {}
 class Locomotive.Views.Inputs.RteView extends Backbone.View
 
   events:
-    'click a.style':        'open_styles_dialog'
-    'click a.table':        'open_table_dialog'
-    'click a.expand':       'expand'
-    'highlight textarea':   'highlight'
+    'click':                        'outside_click'
+    'click a.apply-color':          'apply_color'
+    'click a.remove-color':         'remove_color'
+    'click a.style':                'open_styles_dialog'
+    'click a.table':                'open_table_dialog'
+    'click a.expand':               'expand'
+    'highlight textarea':           'highlight'
 
   initialize: ->
     _.bindAll(@, 'register_editor_events', 'on_content_change', 'resize')
@@ -41,6 +44,7 @@ class Locomotive.Views.Inputs.RteView extends Backbone.View
         @build_and_render_view(Locomotive.Views.Inputs.Rte.TableView),
         @build_and_render_view(Locomotive.Views.Inputs.Rte.EditTableView)
       ]
+      $('.color-picker').colorpicker({format: 'rgba'})
       console.log '[RTE] all views created and rendered'
 
   expand: (event) ->
@@ -53,6 +57,28 @@ class Locomotive.Views.Inputs.RteView extends Backbone.View
     @$style_popover.popover('hide') if @$style_popover?
 
     @resize()
+
+  outside_click: (event) ->
+    if ($(event.target).closest('.wysihtml5-toolbar .popover a').length > 0)
+        @$style_popover.popover('hide') if @$style_popover?
+    if ($(event.target).closest('.wysihtml5-toolbar .popover').length == 0 && $(event.target).closest('.wysihtml5-toolbar-group a').length == 0)
+        @$style_popover.popover('hide') if @$style_popover?
+
+  apply_color: (event) ->
+    event.preventDefault()
+    event.stopPropagation()
+    picker = $(event.target).closest('.wysihtml5-toolbar-group').find('.color-picker')
+    color = picker.colorpicker('getValue', '#000000')
+    color = wysihtml5.quirks.styleParser.parseColor(color)
+    color = 'rgba('+color[0]+','+color[1]+','+color[2]+','+color[3]+')'
+    @editor.composer.commands.exec('foreColorStyle', color)
+    console.log('Color changed: ' + @editor.getValue())
+
+  remove_color: (event) ->
+    event.preventDefault()
+    event.stopPropagation()
+    @editor.composer.commands.remove('foreColorStyle')
+    console.log('Color removed: ' + @editor.getValue())
 
   open_styles_dialog: (event) ->
     $button = $(event.target).closest('a')
