@@ -16,29 +16,45 @@
 
         }
 
-        .color-picker {
+        .input-group {
           display: inline-block;
-          width: 165px;
           height: 1.2em;
+          width: 50px;
+
+          input {
+            width: 45px;
+            height: 1em;
+            font-size: 0.8em;
+            padding-left: 5px;
+            padding-right: 2px;
+          }
+
+        }
+
+        .color-picker {
+          width: 165px;
 
           input {
             width: 130px;
-            height: 1em;
-            font-size: 0.8em;
           }
+
           span {
             width: 30px;
             padding: 5px;
+
             i {
               width: 20px;
               height: 1.2em;
             }
           }
+
         }
+
         .remove-color {
           i {
             text-decoration: line-through;
           }
+
         }
 
         a {

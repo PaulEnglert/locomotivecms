@@ -4,6 +4,9 @@ class Locomotive.Views.Inputs.RteView extends Backbone.View
 
   events:
     'click':                        'outside_click'
+    'click a.fontsize':             'apply_fontsize'
+    'keydown .fontsize input':      'handle_fontsize_keydown'
+    'change .fontsize input':       'apply_fontsize'
     'click a.apply-color':          'apply_color'
     'click a.remove-color':         'remove_color'
     'click a.style':                'open_styles_dialog'
@@ -63,6 +66,33 @@ class Locomotive.Views.Inputs.RteView extends Backbone.View
         @$style_popover.popover('hide') if @$style_popover?
     if ($(event.target).closest('.wysihtml5-toolbar .popover').length == 0 && $(event.target).closest('.wysihtml5-toolbar-group a').length == 0)
         @$style_popover.popover('hide') if @$style_popover?
+
+  handle_fontsize_keydown: (event) ->
+    if (event.which == 13)
+      event.preventDefault() & event.stopPropagation()
+      @apply_fontsize(event)
+    
+  apply_fontsize: (event) ->
+    event.preventDefault() & event.stopPropagation()
+    if ($(event.target).closest('.remove').length > 0)
+      @editor.composer.commands.remove('fontSizeStyle')
+      $(event.target).closest('.wysihtml5-toolbar-group').find('.fontsize.size input').val('')
+    else
+      newsize = undefined
+      if (event.target.localName == 'i')
+        newsize = @editor.composer.commands.state('fontSizeStyle')
+        if (!newsize)
+          newsize = 12
+        else
+          newsize = parseInt($(newsize).css('font-size')) * 72 / 96
+        if ($(event.target).closest('.larger').length > 0)
+          newsize += 1
+        else if ($(event.target).closest('.smaller').length > 0)
+          newsize -= 1
+        $(event.target).closest('.wysihtml5-toolbar-group').find('.fontsize.size input').val(newsize)
+      else
+        newsize = parseInt($(event.target).closest('.wysihtml5-toolbar-group').find('.fontsize.size input').val())
+      @editor.composer.commands.exec('fontSizeStyle', newsize+'pt')
 
   apply_color: (event) ->
     event.preventDefault()
@@ -152,4 +182,3 @@ class Locomotive.Views.Inputs.RteView extends Backbone.View
     @editor.destroy()
 
     super()
-
